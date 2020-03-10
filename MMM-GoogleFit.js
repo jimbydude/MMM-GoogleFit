@@ -18,6 +18,9 @@ Module.register("MMM-GoogleFit", {
     stepCountLabel: false,
     useIcons: true,
     displayWeight: true,
+    displayMoveMin: true,
+    displayHeartPts: true,
+    //displayDays: ["M", "T", "W", "T", "F", "S", "S"],
     colors: [
       "#EEEEEE",
       "#1E88E5",
@@ -26,7 +29,7 @@ Module.register("MMM-GoogleFit", {
       "#FFB300",
       "#F4511E"
     ],
-    debug: false
+    debug: true
   },
 
   getScripts: function() {
@@ -191,7 +194,7 @@ Module.register("MMM-GoogleFit", {
         img.src = this.file("icons/icons8-walking-20.png");
 
         label.appendChild(img);
-        chartWrapper.appendChild(label);
+        //chartWrapper.appendChild(label);
       }
 
       // Create chart canvas
@@ -232,7 +235,7 @@ Module.register("MMM-GoogleFit", {
       });
 
       // Append chart
-      chartWrapper.appendChild(chart);
+      //chartWrapper.appendChild(chart);
       wrapper.appendChild(chartWrapper);
 
       var clear1 = document.createElement("div");
@@ -252,13 +255,37 @@ Module.register("MMM-GoogleFit", {
         label.style.cssText = "float: left; width: " + totalSize + "px; font-size: " + this.config.fontSize + "px; text-align: center; padding-top: 4px";
 
         var br = document.createElement("span");
-        br.innerHTML = "<br>" + (this.config.stepCountLabel ? "<br>" : "");
+        br.innerHTML = (this.config.stepCountLabel ? "<br>" : ""); //"<br>" + 
+        
+        var imgW = document.createElement("img");
+        imgW.src = this.file("icons/icons8-walking-20.png");
+        
+        var BR = document.createElement("span");
+        BR.innerHTML = "<br>";
 
-        var img = document.createElement("img");
-        img.src = this.file("icons/icons8-scale-20.png");
+        var imgS = document.createElement("img");
+        imgS.src = this.file("icons/icons8-scale-20.png");
+        
+        var BRr = document.createElement("span");
+        BRr.innerHTML = "<br>";
+        
+        var imgM = document.createElement("img");
+        imgM.src = this.file("icons/move_min.png");
+        
+        var BRrr = document.createElement("span");
+        BRrr.innerHTML = "<br>";
+        
+        var imgH = document.createElement("img");
+        imgH.src = this.file("icons/heart_pts.png");
 
         label.appendChild(br);
-        label.appendChild(img);
+        label.appendChild(imgW);
+        label.appendChild(BR);
+        label.appendChild(imgS);
+        label.appendChild(BRr);
+        label.appendChild(imgM);
+        label.appendChild(BRrr);
+        label.appendChild(imgH);
         labels.appendChild(label);
       }
 
@@ -267,11 +294,12 @@ Module.register("MMM-GoogleFit", {
         label.style.cssText = "float: left; width: " + totalSize + "px; font-size: " + this.config.fontSize + "px; text-align: center;";
         label.innerHTML = days[i];
 
-        if (this.config.stepCountLabel && steps[i] > 0) {
-          var s = steps[i] / 1000;
-          s = Number(s).toFixed(s < 10 ? 1 : 0);
+        if (this.config.stepCountLabel ) { //&& steps[i] > 0
+          //var s = steps[i] / 1000;
+          //s = Number(s).toFixed(s < 10 ? 1 : 0);
 
-          label.innerHTML += "<br>" + s + "k";
+          //label.innerHTML += "<br>" + s + "k";
+          label.innerHTML += "<br>" + steps[i];
         }
 
         if (weights[i]) {

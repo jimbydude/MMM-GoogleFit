@@ -150,7 +150,8 @@ module.exports = NodeHelper.create({
       rotate = 1;
     }
 
-    var days = ["S", "M", "T", "W", "T", "F", "S"];
+    //var days = ["S", "M", "T", "W", "T", "F", "S"];
+    var days = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"];
     if (rotate != 0) {
       rotate %= days.length;
       days = days.slice(rotate, days.length).concat(days.slice(0, rotate));
@@ -159,6 +160,7 @@ module.exports = NodeHelper.create({
     var req = {
       "aggregateBy": [{
         "dataSourceId": "derived:com.google.step_count.delta:com.google.android.gms:estimated_steps"
+        //"dataSourceId": "derived:com.google.weight:com.google.android.gms:merge_weight"
       }],
       "bucketByTime": { "durationMillis": 86400000 }, // 1 day per bucket
       "startTimeMillis": startTime.getTime(),
@@ -168,6 +170,18 @@ module.exports = NodeHelper.create({
     if (clientConfig.displayWeight) {
       req.aggregateBy.push({
         "dataSourceId": "derived:com.google.weight:com.google.android.gms:merge_weight"
+      });
+    }
+    
+    if (clientConfig.displayHeartPts) {
+      req.aggregateBy.push({
+          "dataSourceId": "derived:com.google.heart_minutes:com.google.android.gms:merge_heart_minutes"
+        });
+      }
+      
+    if (clientConfig.displayMoveMin) {  
+      req.aggregateBy.push({
+        "dataSourceId": "derived:com.google.active_minutes:com.google.android.gms:merge_active_minutes"
       });
     }
 
@@ -184,6 +198,8 @@ module.exports = NodeHelper.create({
         // body is already json at this point
         body.days = days;
         self.sendSocketNotification("STATS", body);
+        //console.log(body.bucket[1].point);
+        console.log(JSON.stringify(body));
       } else {
         self.sendSocketNotification("STATS_ERROR", error);
         self.sendSocketNotification("STATS_ERROR", response);
