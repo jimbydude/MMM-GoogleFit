@@ -1,6 +1,9 @@
 # MMM-GoogleFit
 A magic mirror module to grab google fit daily step count and daily weights.
 
+TODO: Update readme with Heart Rate stuff!!
+
+
 ![status](https://img.shields.io/badge/status-not%20maintained-red.svg)
 
 ## What it Looks Like
