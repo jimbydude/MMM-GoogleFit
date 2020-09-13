@@ -150,8 +150,7 @@ module.exports = NodeHelper.create({
       rotate = 1;
     }
 
-    //var days = ["S", "M", "T", "W", "T", "F", "S"];
-    var days = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"];
+    var days = ["S", "M", "T", "W", "T", "F", "S"];
     if (rotate != 0) {
       rotate %= days.length;
       days = days.slice(rotate, days.length).concat(days.slice(0, rotate));
@@ -159,8 +158,8 @@ module.exports = NodeHelper.create({
 
     var req = {
       "aggregateBy": [{
+		"dataTypeName": "com.google.step_count.delta",
         "dataSourceId": "derived:com.google.step_count.delta:com.google.android.gms:estimated_steps"
-        //"dataSourceId": "derived:com.google.weight:com.google.android.gms:merge_weight"
       }],
       "bucketByTime": { "durationMillis": 86400000 }, // 1 day per bucket
       "startTimeMillis": startTime.getTime(),
@@ -173,17 +172,17 @@ module.exports = NodeHelper.create({
       });
     }
     
+    if (clientConfig.displayActive) {  
+      req.aggregateBy.push({
+        "dataSourceId": "derived:com.google.active_minutes:com.google.android.gms:merge_active_minutes"
+      });
+    }
+
     if (clientConfig.displayHeartPts) {
       req.aggregateBy.push({
           "dataSourceId": "derived:com.google.heart_minutes:com.google.android.gms:merge_heart_minutes"
         });
       }
-      
-    if (clientConfig.displayMoveMin) {  
-      req.aggregateBy.push({
-        "dataSourceId": "derived:com.google.active_minutes:com.google.android.gms:merge_active_minutes"
-      });
-    }
 
     var options = {
       url: url,
